@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
+</head>
+
+<body>
+    <script>
+        var config = {
+            type: Phaser.AUTO,
+            width: 1600,
+            height: 800,
+            backgroundColor: '#ffffff',
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: {
+                        y: 0
+                    }
+                }
+            },
+            scene: {
+                preload: preload,
+                create: create,
+                update: update,
+            }
+        };
+
+        var game = new Phaser.Game(config);
+
+        var speed1 = 5;
+        var speed2 = 10;
+        var speed3 = 15;
+        var cas1, cas2, cas3, cas4, cas5, cas6, cas7, cas8, cas9, start, stop;
+
+        var check = false;
+
+        function preload() {
+            this.load.image('cas1', 'assets/cas1.jpg');
+            this.load.image('cas2', 'assets/cas2.jpg');
+            this.load.image('cas3', 'assets/cas3.jpg');
+            this.load.image('start', 'assets/start.jpg');
+            this.load.image('stop', 'assets/stop.jpg');
+        }
+
+        function create() {
+            cas1 = this.add.image(300, 100, 'cas1');
+            cas1.name = 'cas1';
+            cas2 = this.add.image(300, 300, 'cas3');
+            cas2.name = 'cas2';
+            cas3 = this.add.image(300, 500, 'cas2');
+            cas3.name = 'cas3';
+
+            cas4 = this.add.image(500, 100, 'cas2');
+            cas4.name = 'cas2';
+            cas5 = this.add.image(500, 300, 'cas1');
+            cas5.name = 'cas1';
+            cas6 = this.add.image(500, 500, 'cas3');
+            cas6.name = 'cas3';
+
+            cas7 = this.add.image(700, 100, 'cas3');
+            cas7.name = 'cas3';
+            cas8 = this.add.image(700, 300, 'cas1');
+            cas8.name = 'cas1';
+            cas9 = this.add.image(700, 500, 'cas2');
+            cas9.name = 'cas2';
+
+            start = this.add.image(900, 200, 'start');
+            start.setInteractive();
+            start.name = 'start';
+
+            stopImage = this.add.image(900, 400, 'stop');
+            stopImage.setInteractive();
+            stopImage.name = 'stop';
+
+            this.input.on('gameobjectdown', gameCondition);
+        }
+
+        function update() {
+            if (check) {
+                rotate(cas1, speed1);
+                rotate(cas2, speed1);
+                rotate(cas3, speed1);
+                rotate(cas4, speed2);
+                rotate(cas5, speed2);
+                rotate(cas6, speed2);
+                rotate(cas7, speed3);
+                rotate(cas8, speed3);
+                rotate(cas9, speed3);
+            }
+            if (!check) {
+                checkAfter(cas1);
+                checkAfter(cas2);
+                checkAfter(cas3);
+                checkAfter(cas4);
+                checkAfter(cas5);
+                checkAfter(cas6);
+                checkAfter(cas7);
+                checkAfter(cas8);
+                checkAfter(cas9);
+            }
+        }
+
+        function gameCondition(pointer, gameObject) {
+            var timerId;
+            if (gameObject.name == 'start') {
+                check = true;
+                timerId = setTimeout(() => {
+                    check = false;
+                }, 5000);
+            }
+            if (gameObject.name == 'stop') {
+                check = false;
+                clearTimeout(timerId);
+            }
+        }
+
+        function rotate(block, speed) {
+            block.y += speed;
+
+            if (block.y >= 600) {
+                block.y = 0;
+            }
+        }
+
+        function checkAfter(block) {
+            if (block.y < 100) {
+                block.y += 5;
+            } else if (block.y > 100 && block.y < 300) {
+                block.y += 5;
+            } else if (block.y > 300 && block.y < 500) {
+                block.y += 5;
+            } else if (block.y > 500) {
+                block.y += 5;
+                if (block.y >= 600) {
+                    block.y = 0;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
